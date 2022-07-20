@@ -137,9 +137,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\Car.cpp" />
     <ClCompile Include="src\Challenge2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="headers\Car.h" />
     <ClInclude Include="headers\Challenge1.h" />
     <ClInclude Include="headers\Challenge2.h" />
   </ItemGroup>
