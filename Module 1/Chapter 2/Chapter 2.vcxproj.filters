@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\Challenge1.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Challenge2.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="headers\Challenge1.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Challenge2.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="headers">
+      <UniqueIdentifier>{9d264e96-887f-4127-9e14-882e37ab8307}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources">
+      <UniqueIdentifier>{0ae13e6d-e24a-4c2d-8e41-ecec877dee0e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
