@@ -139,11 +139,17 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Car.cpp" />
     <ClCompile Include="src\Challenge2.cpp" />
+    <ClCompile Include="src\Character.cpp" />
+    <ClCompile Include="src\Enemy.cpp" />
+    <ClCompile Include="src\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Car.h" />
     <ClInclude Include="headers\Challenge1.h" />
     <ClInclude Include="headers\Challenge2.h" />
+    <ClInclude Include="headers\Character.h" />
+    <ClInclude Include="headers\Enemy.h" />
+    <ClInclude Include="headers\Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
