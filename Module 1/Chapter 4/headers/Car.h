@@ -1,20 +1,16 @@
 #pragma once
+#include "Vehicle.h"
 #include <string>
 
-class Car
+class Car : public Vehicle
 {
 public:
 	Car() = default;
 	Car(int aYear,
-		int aMiles,
+		int aMilesOrHours,
 		const std::string& aBrand);
 	~Car() = default;
 
-	void Display();
-	void Drive(int aMiles);
-
-protected:
-	int mYear {0};
-	int mMiles {0};
-	std::string mBrand {"Unspecified"};
+	virtual void Display() override;
+	virtual void Drive(int aMiles) override;
 };

@@ -1,20 +1,19 @@
 #include <iostream>
 #include "Car.h"
 
-Car::Car(int aYears, int aMiles, const std::string& aBrand)
-	: mYear(aYears)
-	, mMiles(aMiles)
-	, mBrand(aBrand)
+Car::Car(int aYears, int aMilesOrHours, const std::string& aBrand)
+	: Vehicle(aYears, aMilesOrHours, aBrand)
 { /* no-op */ }
 
 void Car::Display()
 {
-	std::cout << "Brand: " << mBrand << std::endl;
-	std::cout << "Miles: " << mMiles << std::endl;
-	std::cout << "Year:  " << mYear << std::endl;
+	std::cout << "Here is a bit about my car:" << std::endl;
+	std::cout << "Miles: " << mMilesOrHours << std::endl;
+	Vehicle::Display();
 }
 
 void Car::Drive(int aMiles)
 {
-	mMiles += aMiles;
+	std::cout << "Driving my car " << aMiles << " miles!" << std::endl;
+	Vehicle::Drive(aMiles);
 }
