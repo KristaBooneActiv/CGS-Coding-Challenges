@@ -1,6 +1,7 @@
 #include "ChallengeRunner.h"
 #include "Challenge1.h"
 #include "Challenge2.h"
+#include "Challenge3.h"
 
 int main()
 {
@@ -9,6 +10,6 @@ int main()
 	ChallengeRunner runner;
 	runner.addChallenge(std::make_unique<Challenge1<int, 10>>(arr));
 	runner.addChallenge(std::make_unique<Challenge2>());
-
+	runner.addChallenge(std::make_unique<Challenge3>());
 	runner.run();
 }
