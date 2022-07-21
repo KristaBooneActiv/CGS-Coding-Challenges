@@ -18,7 +18,7 @@ void Challenge2::run()
 	Car myCar(2015, 70000, "Chevy");
 	myCar.Display();
 	
-	std::cout << "After driving myCar 200 miles..." << std::endl;
 	myCar.Drive(200);
+	std::cout << "After driving myCar 200 miles..." << std::endl;
 	myCar.Display();
 }
