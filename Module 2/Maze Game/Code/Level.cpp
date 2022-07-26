@@ -37,7 +37,6 @@ Level::~Level()
 
 bool Level::Load(std::string levelName, int* playerX, int* playerY)
 {
-	levelName.insert(0, "../");
 	ifstream levelFile;
 	levelFile.open(levelName);
 	if (!levelFile)

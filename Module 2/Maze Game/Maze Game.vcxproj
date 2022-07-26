@@ -63,6 +63,17 @@
     <ClCompile Include="Code\StateMachineExampleGame.cpp" />
     <ClCompile Include="Code\WinState.cpp" />
   </ItemGroup>
+  <ItemGroup>
+	<Content Include="Level1.txt">
+	<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
+	  <Content Include="Level2.txt">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Level3.txt">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{9FFAED25-22A0-4CF5-92AD-0E31E24EEBFA}</ProjectGuid>
