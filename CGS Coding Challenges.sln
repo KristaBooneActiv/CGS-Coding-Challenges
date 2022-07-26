@@ -24,6 +24,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Chapter 1", "Module 2\Chapt
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Module 2", "Module 2", "{EC6E8DCD-ED00-4926-851F-B44178625A30}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Maze Game", "Module 2\Maze Game\Maze Game.vcxproj", "{9FFAED25-22A0-4CF5-92AD-0E31E24EEBFA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
