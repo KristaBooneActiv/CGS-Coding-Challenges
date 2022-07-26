@@ -6,7 +6,6 @@ public:
 	Enemy(int x, int y, int deltaX = 0, int deltaY = 0);
 
 	virtual ActorType GetType() override { return ActorType::Enemy; }
-	virtual void Draw() override;
 	virtual void Update() override;
 
 protected:

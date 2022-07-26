@@ -8,5 +8,4 @@ public:
 	~ShadowActivator() = default;
 
 	virtual ActorType GetType() override { return ActorType::ShadowActivator; }
-	virtual void Draw() override;
 };

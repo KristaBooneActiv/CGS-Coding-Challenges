@@ -1,9 +1,12 @@
+#include <windows.h>
+#include <iostream>
 #include "PlacableActor.h"
 
-PlacableActor::PlacableActor(int x, int y, ActorColor color)
+PlacableActor::PlacableActor(int x, int y, char c, ActorColor color)
 	: m_pPosition(new Point(x, y))
 	, m_IsActive(true)
 	, m_color(color)
+	, m_drawChar(c)
 {
 
 }
@@ -45,4 +48,12 @@ void PlacableActor::Place(int x, int y)
 	m_pPosition->x = x;
 	m_pPosition->y = y;
 	m_IsActive = true;
+}
+
+void PlacableActor::Draw() const
+{
+	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(console, (int)GetColor());
+	std::cout << m_drawChar;
+	SetConsoleTextAttribute(console, (int)ActorColor::Regular);
 }

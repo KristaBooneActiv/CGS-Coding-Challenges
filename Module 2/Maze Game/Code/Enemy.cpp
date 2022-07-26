@@ -2,7 +2,7 @@
 #include <iostream>
 
 Enemy::Enemy(int x, int y, int deltaX, int deltaY)
-	: PlacableActor(x, y)
+	: PlacableActor(x, y, (char)153)
 	, m_currentMovementX(0)
 	, m_currentMovementY(0)
 	, m_directionX(0)
@@ -23,11 +23,6 @@ void Enemy::InitDirection()
 	{
 		m_directionY = 1;
 	}
-}
-
-void Enemy::Draw()
-{
-	std::cout << (char)153;
 }
 
 void Enemy::Update()

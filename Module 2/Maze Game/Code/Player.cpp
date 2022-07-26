@@ -9,7 +9,7 @@ using namespace std;
 constexpr int kStartingNumberOfLives = 3;
 
 Player::Player()
-	: PlacableActor(0, 0)
+	: PlacableActor(0, 0, '@')
 	, m_pCurrentKey(nullptr)
 	, m_money(0)
 	, m_lives(kStartingNumberOfLives)
@@ -49,9 +49,4 @@ void Player::DropKey()
 		m_pCurrentKey->Place(m_pPosition->x, m_pPosition->y);
 		m_pCurrentKey = nullptr;
 	}
-}
-
-void Player::Draw()
-{
-	cout << "@";
 }

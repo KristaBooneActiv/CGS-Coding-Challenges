@@ -7,5 +7,4 @@ public:
 	ShadowPlayer(int x, int y);
 
 	virtual ActorType GetType() override;
-	virtual void Draw() override;
 };

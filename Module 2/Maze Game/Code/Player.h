@@ -22,7 +22,6 @@ public:
 	void DecrementLives() { m_lives--; }
 
 	virtual ActorType GetType() override { return ActorType::Player; }
-	virtual void Draw() override;
 private:
 	Key* m_pCurrentKey;
 	int m_money;

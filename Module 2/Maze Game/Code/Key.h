@@ -3,13 +3,7 @@
 class Key : public PlacableActor
 {
 public:
-	Key(int x, int y, ActorColor color)
-		: PlacableActor(x, y, color)
-	{
-
-	}
-
+	Key(int x, int y, ActorColor color);
 	virtual ActorType GetType() override { return ActorType::Key; }
-	virtual void Draw() override;
 };
 
