@@ -1,6 +1,7 @@
 #pragma once
 #include "GameState.h"
 #include "Player.h"
+#include "ShadowPlayer.h"
 #include "Level.h"
 
 #include <windows.h>
@@ -15,6 +16,8 @@ class GameplayState : public GameState
 	
 	Player m_player;
 	Level* m_pLevel;
+
+	ShadowPlayer* m_playerShadow;
 
 	bool m_beatLevel;
 	int m_skipFrameCount;
@@ -33,7 +36,7 @@ public:
 	virtual void Draw() override;
 
 private:
-	void HandleCollision(int newPlayerX, int newPlayerY);
+	void HandleCollision(PlacableActor& aActor, int newX, int newY);
 	bool Load();
 	void DrawHUD(const HANDLE& console);
 };

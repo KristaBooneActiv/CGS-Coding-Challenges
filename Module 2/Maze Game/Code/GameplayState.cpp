@@ -14,6 +14,7 @@
 #include "AudioManager.h"
 #include "Utility.h"
 #include "StateMachineExampleGame.h"
+#include "ShadowActivator.h"
 
 using namespace std;
 
@@ -30,6 +31,7 @@ GameplayState::GameplayState(StateMachineExampleGame* pOwner)
 	, m_skipFrameCount(0)
 	, m_currentLevel(0)
 	, m_pLevel(nullptr)
+	, m_playerShadow(nullptr)
 {
 	m_LevelNames.push_back("Level1.txt");
 	m_LevelNames.push_back("Level2.txt");
@@ -40,6 +42,12 @@ GameplayState::~GameplayState()
 {
 	delete m_pLevel;
 	m_pLevel = nullptr;
+
+	if (m_playerShadow)
+	{
+		delete m_playerShadow;
+		m_playerShadow = nullptr;
+	}
 }
 
 bool GameplayState::Load()
@@ -48,6 +56,11 @@ bool GameplayState::Load()
 	{
 		delete m_pLevel;
 		m_pLevel = nullptr;
+	}
+	if (m_playerShadow)
+	{
+		delete m_playerShadow;
+		m_playerShadow = nullptr;
 	}
 
 	m_pLevel = new Level();
@@ -73,6 +86,9 @@ bool GameplayState::Update(bool processInput)
 		int newPlayerX = m_player.GetXPosition();
 		int newPlayerY = m_player.GetYPosition();
 
+		int shadowPlayerDeltaX = 0;
+		int shadowPlayerDeltaY = 0;
+
 		// One of the arrow keys were pressed
 		if (input == kArrowInput)
 		{
@@ -83,21 +99,25 @@ bool GameplayState::Update(bool processInput)
 			(char)input == 'A' || (char)input == 'a')
 		{
 			newPlayerX--;
+			shadowPlayerDeltaX = 1;
 		}
 		else if ((input == kArrowInput && arrowInput == kRightArrow) ||
 			(char)input == 'D' || (char)input == 'd')
 		{
 			newPlayerX++;
+			shadowPlayerDeltaX = -1;
 		}
 		else if ((input == kArrowInput && arrowInput == kUpArrow) ||
 			(char)input == 'W' || (char)input == 'w')
 		{
 			newPlayerY--;
+			shadowPlayerDeltaY = 1;
 		}
 		else if ((input == kArrowInput && arrowInput == kDownArrow) ||
 			(char)input == 'S' || (char)input == 's')
 		{
 			newPlayerY++;
+			shadowPlayerDeltaY = -1;
 		}
 		else if (input == kEscapeKey)
 		{
@@ -115,7 +135,15 @@ bool GameplayState::Update(bool processInput)
 		}
 		else
 		{
-			HandleCollision(newPlayerX, newPlayerY);
+			HandleCollision(m_player, newPlayerX, newPlayerY);
+
+			// Move the shadow, if active and handle collisions
+			if (m_playerShadow)
+			{
+				HandleCollision(*m_playerShadow,
+					m_playerShadow->GetXPosition() + shadowPlayerDeltaX,
+					m_playerShadow->GetYPosition() + shadowPlayerDeltaY);
+			}
 		}
 	}
 	if (m_beatLevel)
@@ -146,9 +174,10 @@ bool GameplayState::Update(bool processInput)
 	return false;
 }
 
-void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
+void GameplayState::HandleCollision(PlacableActor& aActor, int newX, int newY)
 {
-	PlacableActor* collidedActor = m_pLevel->UpdateActors(newPlayerX, newPlayerY);
+
+	PlacableActor* collidedActor = m_pLevel->UpdateActors(newX, newY);
 	if (collidedActor != nullptr && collidedActor->IsActive())
 	{
 		switch (collidedActor->GetType())
@@ -159,7 +188,7 @@ void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
 			assert(collidedEnemy);
 			AudioManager::GetInstance()->PlayLoseLivesSound();
 			collidedEnemy->Remove();
-			m_player.SetPosition(newPlayerX, newPlayerY);
+			aActor.SetPosition(newX, newY);
 
 			m_player.DecrementLives();
 			if (m_player.GetLives() < 0)
@@ -177,7 +206,7 @@ void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
 			AudioManager::GetInstance()->PlayMoneySound();
 			collidedMoney->Remove();
 			m_player.AddMoney(collidedMoney->GetWorth());
-			m_player.SetPosition(newPlayerX, newPlayerY);
+			aActor.SetPosition(newX, newY);
 			break;
 		}
 		case ActorType::Key:
@@ -188,9 +217,29 @@ void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
 			{
 				m_player.PickupKey(collidedKey);
 				collidedKey->Remove();
-				m_player.SetPosition(newPlayerX, newPlayerY);
+				aActor.SetPosition(newX, newY);
 				AudioManager::GetInstance()->PlayKeyPickupSound();
 			}
+			break;
+		}
+		case ActorType::ShadowActivator:
+		{
+			// NOTE- We should only ever get here if the actor passed into this funciton is a player!
+			assert(aActor.GetType() == ActorType::Player);
+
+			// No need to cast, just remove the shadow activator element.
+			collidedActor->Remove();
+
+			// Set the position of the player
+			m_player.SetPosition(newX, newY);
+
+			// Activate the shadow player
+			// NOTE- not the best practice because we don't know where anything is!
+			int shadowStartX = m_pLevel->GetWidth() - 2;
+			int shadowStartY = m_pLevel->GetHeight() - 2;
+
+			m_playerShadow = new ShadowPlayer(shadowStartX, shadowStartY);
+			m_playerShadow->Place(shadowStartX, shadowStartY); // redundant, but required to get isActive=true...
 			break;
 		}
 		case ActorType::Door:
@@ -204,7 +253,7 @@ void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
 					collidedDoor->Open();
 					collidedDoor->Remove();
 					m_player.UseKey();
-					m_player.SetPosition(newPlayerX, newPlayerY);
+					aActor.SetPosition(newX, newY);
 					AudioManager::GetInstance()->PlayDoorOpenSound();
 				}
 				else
@@ -214,7 +263,7 @@ void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
 			}
 			else
 			{
-				m_player.SetPosition(newPlayerX, newPlayerY);
+				aActor.SetPosition(newX, newY);
 			}
 			break;
 		}
@@ -223,7 +272,7 @@ void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
 			Goal* collidedGoal = dynamic_cast<Goal*>(collidedActor);
 			assert(collidedGoal);
 			collidedGoal->Remove();
-			m_player.SetPosition(newPlayerX, newPlayerY);
+			aActor.SetPosition(newX, newY);
 			m_beatLevel = true;
 			break;
 		}
@@ -231,11 +280,11 @@ void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
 			break;
 		}
 	}
-	else if (m_pLevel->IsSpace(newPlayerX, newPlayerY)) // no collision
+	else if (m_pLevel->IsSpace(newX, newY)) // no collision
 	{
-		m_player.SetPosition(newPlayerX, newPlayerY);
+		aActor.SetPosition(newX, newY);
 	}
-	else if (m_pLevel->IsWall(newPlayerX, newPlayerY))
+	else if (m_pLevel->IsWall(newX, newY))
 	{
 		// wall collision, do nothing
 	}
@@ -254,6 +303,15 @@ void GameplayState::Draw()
 	actorCursorPosition.Y = m_player.GetYPosition();
 	SetConsoleCursorPosition(console, actorCursorPosition);
 	m_player.Draw();
+	
+	if (m_playerShadow)
+	{
+		COORD actorCursorPosition;
+		actorCursorPosition.X = m_playerShadow->GetXPosition();
+		actorCursorPosition.Y = m_playerShadow->GetYPosition();
+		SetConsoleCursorPosition(console, actorCursorPosition);
+		m_playerShadow->Draw();
+	}
 
 	// Set the cursor to the end of the level
 	COORD currentCursorPosition;

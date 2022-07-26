@@ -38,6 +38,8 @@
     <ClInclude Include="Code\Player.h" />
     <ClInclude Include="Code\Point.h" />
     <ClInclude Include="Code\SettingsState.h" />
+    <ClInclude Include="Code\ShadowActivator.h" />
+    <ClInclude Include="Code\ShadowPlayer.h" />
     <ClInclude Include="Code\StateMachineExampleGame.h" />
     <ClInclude Include="Code\Utility.h" />
     <ClInclude Include="Code\WinState.h" />
@@ -60,19 +62,21 @@
     <ClCompile Include="Code\Player.cpp" />
     <ClCompile Include="Code\Main.cpp" />
     <ClCompile Include="Code\SettingsState.cpp" />
+    <ClCompile Include="Code\ShadowActivator.cpp" />
+    <ClCompile Include="Code\ShadowPlayer.cpp" />
     <ClCompile Include="Code\StateMachineExampleGame.cpp" />
     <ClCompile Include="Code\WinState.cpp" />
   </ItemGroup>
   <ItemGroup>
-	<Content Include="Level1.txt">
-	<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</Content>
-	  <Content Include="Level2.txt">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Level3.txt">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
+    <Content Include="Level1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Level2.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Level3.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
