@@ -13,11 +13,20 @@ int main()
 
 	myGame.Initialize(&gameStateMachine);
 
-	myGame.RunGameLoop();
+	int gameReturn = 0;
+	try
+	{
+		myGame.RunGameLoop();
+	}
+	catch (const std::exception& e)
+	{
+		cerr << e.what() << endl;
+		gameReturn = -1;
+	}
 
 	myGame.Deinitialize();
 
 	AudioManager::DestroyInstance();
 
-	return 0;
+	return gameReturn;
 }

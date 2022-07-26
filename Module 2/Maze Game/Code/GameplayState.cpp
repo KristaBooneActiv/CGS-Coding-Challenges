@@ -4,6 +4,7 @@
 #include <conio.h>
 #include <windows.h>
 #include <assert.h>
+#include <exception>
 
 #include "Enemy.h"
 #include "Key.h"
@@ -57,7 +58,10 @@ bool GameplayState::Load()
 
 void GameplayState::Enter()
 {
-	Load();
+	if (!Load())
+	{
+		throw std::runtime_error("FATAL ERROR: Unable to load level file");
+	}
 }
 
 bool GameplayState::Update(bool processInput)

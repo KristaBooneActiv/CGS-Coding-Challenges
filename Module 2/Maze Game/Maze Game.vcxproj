@@ -58,7 +58,7 @@
     <ClCompile Include="Code\Money.cpp" />
     <ClCompile Include="Code\PlacableActor.cpp" />
     <ClCompile Include="Code\Player.cpp" />
-    <ClCompile Include="Code\Project.cpp" />
+    <ClCompile Include="Code\Main.cpp" />
     <ClCompile Include="Code\SettingsState.cpp" />
     <ClCompile Include="Code\StateMachineExampleGame.cpp" />
     <ClCompile Include="Code\WinState.cpp" />
