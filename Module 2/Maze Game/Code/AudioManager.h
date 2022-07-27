@@ -1,5 +1,7 @@
 #pragma once
 #include <windows.h>
+#include <Mmsystem.h>
+#include <mciapi.h>
 
 class AudioManager
 {
@@ -39,72 +41,105 @@ public:
 		return m_SoundOn;
 	}
 
+	void PlayMainTheme()
+	{
+		if (!m_SoundOn)
+			return;
+
+		StopCurrentTheme();
+
+		// Source: Steven O�Brien - licensed under a Creative Commons License
+		mciSendString(L"open \"Sound\\MainTheme.mp3\" type mpegvideo alias mp3", NULL, 0, NULL);
+		mciSendString(L"play mp3 repeat", NULL, 0, NULL);
+	}
+
+	void StopCurrentTheme()
+	{
+		if (!m_SoundOn)
+			return;
+		mciSendString(L"stop mp3", NULL, 0, NULL);
+	}
+
 	void PlayDoorClosedSound()
 	{
 		if (!m_SoundOn)
 			return;
-		Beep(500, 75);
-		Beep(500, 75);
+		// Source: Royalty-free Soniss GameAudioGDC packages
+		PlaySound(L"Sound\\DoorLocked.wav", GetModuleHandle(NULL), SND_ASYNC);
 	}
 
 	void PlayDoorOpenSound()
 	{
 		if (!m_SoundOn)
 			return;
-		Beep(1397, 200);
+		// Source: Royalty-free Soniss GameAudioGDC packages
+		PlaySound(L"Sound\\DoorUnlock.wav", GetModuleHandle(NULL), SND_ASYNC);
 	}
 
 	void PlayKeyPickupSound()
 	{
 		if (!m_SoundOn)
 			return;
-		Beep(1568, 50);
-		Beep(1568, 200);
+		// Source: Royalty-free Soniss GameAudioGDC packages
+		PlaySound(L"Sound\\KeyPickup.wav", GetModuleHandle(NULL), SND_ASYNC);
 	}
 
 	void PlayKeyDropSound()
 	{
 		if (!m_SoundOn)
 			return;
-		Beep(1568, 200);
-		Beep(1568, 50);
+		// Source: Royalty-free Soniss GameAudioGDC packages
+		PlaySound(L"Sound\\KeyDrop.wav", GetModuleHandle(NULL), SND_ASYNC);
 	}
 
 	void PlayMoneySound()
 	{
 		if (!m_SoundOn)
 			return;
-		Beep(1568, 50);
+		// Source: Royalty-free Soniss GameAudioGDC packages
+		PlaySound(L"Sound\\Money.wav", GetModuleHandle(NULL), SND_ASYNC);
 	}
 
 	void PlayLoseLivesSound()
 	{
 		if (!m_SoundOn)
 			return;
-		Beep(200, 100);
+		// Source: Royalty-free Soniss GameAudioGDC packages
+		PlaySound(L"Sound\\Damage.wav", GetModuleHandle(NULL), SND_ASYNC);
+	}
+
+	void PlayShadowActivatedSound()
+	{
+		if (!m_SoundOn)
+			return;
+		// Source: Royalty-free Soniss GameAudioGDC packages
+		PlaySound(L"Sound\\ShadowActivated.wav", GetModuleHandle(NULL), SND_ASYNC);
+	}
+
+	void PlayNextLevelSound()
+	{
+		if (!m_SoundOn)
+			return;
+		// Source: Royalty-free Soniss GameAudioGDC packages
+		PlaySound(L"Sound\\NextLevel.wav", GetModuleHandle(NULL), SND_ASYNC);
 	}
 
 	void PlayLoseSound()
 	{
 		if (!m_SoundOn)
 			return;
-		Beep(500, 75);
-		Beep(500, 75);
-		Beep(500, 75);
-		Beep(500, 75);
+		StopCurrentTheme();
+		// Source: Royalty-free Soniss GameAudioGDC packages
+		PlaySound(L"Sound\\LoseGame.wav", GetModuleHandle(NULL), SND_ASYNC);
 	}
 
 	void PlayWinSound()
 	{
 		if (!m_SoundOn)
 			return;
-		Beep(1568, 200);
-		Beep(1568, 200);
-		Beep(1568, 200);
-		Beep(1245, 1000);
-		Beep(1397, 200);
-		Beep(1397, 200);
-		Beep(1397, 200);
-		Beep(1175, 1000);
+
+		StopCurrentTheme();
+		// Source: Royalty-free Soniss GameAudioGDC packages
+		PlaySound(L"Sound\\WinGame.wav", GetModuleHandle(NULL), SND_ASYNC);
 	}
 };

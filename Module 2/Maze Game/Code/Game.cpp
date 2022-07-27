@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "AudioManager.h"
 
 Game::Game()
 	: m_pStateMachine(nullptr)
@@ -18,7 +19,6 @@ void Game::Initialize(GameStateMachine* pStateMachine)
 void Game::RunGameLoop()
 {
 	bool isGameOver = false;
-
 	while (!isGameOver)
 	{
 		// update with no input
@@ -28,7 +28,6 @@ void Game::RunGameLoop()
 		// Update with input
 		isGameOver = Update();
 	}
-
 	Draw();
 }
 

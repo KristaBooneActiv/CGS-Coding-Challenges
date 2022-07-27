@@ -36,6 +36,7 @@ GameplayState::GameplayState(StateMachineExampleGame* pOwner)
 	m_LevelNames.push_back("Level1.txt");
 	m_LevelNames.push_back("Level2.txt");
 	m_LevelNames.push_back("Level3.txt");
+	AudioManager::GetInstance()->PlayMainTheme();
 }
 
 GameplayState::~GameplayState()
@@ -157,7 +158,6 @@ bool GameplayState::Update(bool processInput)
 			if (m_currentLevel == m_LevelNames.size())
 			{
 				Utility::WriteHighScore(m_player.GetMoney());
-
 				AudioManager::GetInstance()->PlayWinSound();
 				
 				m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Win);
@@ -240,6 +240,7 @@ void GameplayState::HandleCollision(PlacableActor& aActor, int newX, int newY)
 
 			m_playerShadow = new ShadowPlayer(shadowStartX, shadowStartY);
 			m_playerShadow->Place(shadowStartX, shadowStartY); // redundant, but required to get isActive=true...
+			AudioManager::GetInstance()->PlayShadowActivatedSound();
 			break;
 		}
 		case ActorType::Door:
@@ -274,6 +275,7 @@ void GameplayState::HandleCollision(PlacableActor& aActor, int newX, int newY)
 			collidedGoal->Remove();
 			aActor.SetPosition(newX, newY);
 			m_beatLevel = true;
+			AudioManager::GetInstance()->PlayNextLevelSound();
 			break;
 		}
 		default:
