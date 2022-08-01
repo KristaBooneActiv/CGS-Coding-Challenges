@@ -1,4 +1,5 @@
 #pragma once
+#include <chrono>
 #include <iostream>
 #include <optional>
 #include <string>
@@ -58,4 +59,15 @@ namespace util
         }
         return result;
     }
+
+    static uint32_t getNanos()
+    {
+        using namespace std::chrono;
+        return static_cast<uint32_t>(
+            duration_cast<nanoseconds>(
+                system_clock::now().time_since_epoch()
+                ).count()
+            );
+    }
+
 }
