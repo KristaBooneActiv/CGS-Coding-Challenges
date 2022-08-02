@@ -4,6 +4,8 @@
 #include "ShadowPlayer.h"
 #include "Level.h"
 
+#include "CollisionEngine.h"
+
 #include <windows.h>
 #include <vector>
 #include <string>
@@ -13,6 +15,8 @@ class StateMachineExampleGame;
 class GameplayState : public GameState
 {
 	StateMachineExampleGame* m_pOwner;
+
+	CollisionEngine m_collisionEngine;
 	
 	Player m_player;
 	Level* m_pLevel;

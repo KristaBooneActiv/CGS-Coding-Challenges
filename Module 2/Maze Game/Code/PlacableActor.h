@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include "Point.h"
 
 enum class ActorColor
@@ -24,6 +25,31 @@ enum class ActorType
 	ShadowActivator,
 	ShadowPlayer
 };
+
+static std::string ActorTypeToString(ActorType type)
+{
+	switch (type)
+	{
+	case ActorType::Door:
+		return "Door";
+	case ActorType::Enemy:
+		return "Enemy";
+	case ActorType::Goal:
+		return "Goal";
+	case ActorType::Key:
+		return "Key";
+	case ActorType::Money:
+		return "Money";
+	case ActorType::Player:
+		return "Player";
+	case ActorType::ShadowActivator:
+		return "ShadowActivator";
+	case ActorType::ShadowPlayer:
+		return "ShadowPlayer";
+	default:
+		return "Undefined";
+	}
+}
 
 class PlacableActor
 {

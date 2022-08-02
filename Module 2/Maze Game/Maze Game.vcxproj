@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\AudioManager.h" />
+    <ClInclude Include="Code\CollisionEngine.h" />
     <ClInclude Include="Code\Door.h" />
     <ClInclude Include="Code\Enemy.h" />
     <ClInclude Include="Code\Game.h" />
@@ -46,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\AudioManager.cpp" />
+    <ClCompile Include="Code\CollisionEngine.cpp" />
     <ClCompile Include="Code\Door.cpp" />
     <ClCompile Include="Code\Enemy.cpp" />
     <ClCompile Include="Code\Game.cpp" />
@@ -89,25 +91,25 @@
     <Content Include="Sound/KeyDrop.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-	<Content Include="Sound/KeyPickup.wav">
+    <Content Include="Sound/KeyPickup.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-	<Content Include="Sound/Money.wav">
+    <Content Include="Sound/Money.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-	<Content Include="Sound/ShadowActivated.wav">
+    <Content Include="Sound/ShadowActivated.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-	<Content Include="Sound/NextLevel.wav">
+    <Content Include="Sound/NextLevel.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-	<Content Include="Sound/WinGame.wav">
+    <Content Include="Sound/WinGame.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-	<Content Include="Sound/LoseGame.wav">
+    <Content Include="Sound/LoseGame.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-	<Content Include="Sound/MainTheme.mp3">
+    <Content Include="Sound/MainTheme.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

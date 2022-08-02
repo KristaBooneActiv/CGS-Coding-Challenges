@@ -32,6 +32,7 @@ GameplayState::GameplayState(StateMachineExampleGame* pOwner)
 	, m_currentLevel(0)
 	, m_pLevel(nullptr)
 	, m_playerShadow(nullptr)
+	, m_collisionEngine()
 {
 	m_LevelNames.push_back("Level1.txt");
 	m_LevelNames.push_back("Level2.txt");
@@ -174,65 +175,38 @@ bool GameplayState::Update(bool processInput)
 	return false;
 }
 
+// =========================================================================
+// Refactored this method to make use of the collision engine
+// which handles managing placableActor behaviors when the collide.
+// 
+// Mostly removes the responsibility of managing collisions from the gameplay
+// state. I considered having each object know how it interacts with other
+// objects, but decided to have a 3rd party object to avoid adding too much
+// info into the player/enemy/etc. classes.
+// 
+// There could be less code here if we passed a reference of GampeplayState
+// to the CollisionEngine, and exposed some functions on GameplayState.
 void GameplayState::HandleCollision(PlacableActor& aActor, int newX, int newY)
 {
-
 	PlacableActor* collidedActor = m_pLevel->UpdateActors(newX, newY);
-	if (collidedActor != nullptr && collidedActor->IsActive())
+
+	if (collidedActor && collidedActor->IsActive())
 	{
-		switch (collidedActor->GetType())
+		auto result = m_collisionEngine.Collide(m_player, collidedActor);
+		switch (result)
 		{
-		case ActorType::Enemy:
+		case CollisionEngine::ePlayerContinueWithoutMove:
 		{
-			Enemy* collidedEnemy = dynamic_cast<Enemy*>(collidedActor);
-			assert(collidedEnemy);
-			AudioManager::GetInstance()->PlayLoseLivesSound();
-			collidedEnemy->Remove();
-			aActor.SetPosition(newX, newY);
-
-			m_player.DecrementLives();
-			if (m_player.GetLives() < 0)
-			{
-				//TODO: Go to game over screen
-				AudioManager::GetInstance()->PlayLoseSound();
-				m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Lose);
-			}
+			// no-op
 			break;
 		}
-		case ActorType::Money:
+		case CollisionEngine::ePlayerContinueWithMove:
 		{
-			Money* collidedMoney = dynamic_cast<Money*>(collidedActor);
-			assert(collidedMoney);
-			AudioManager::GetInstance()->PlayMoneySound();
-			collidedMoney->Remove();
-			m_player.AddMoney(collidedMoney->GetWorth());
 			aActor.SetPosition(newX, newY);
 			break;
-		}
-		case ActorType::Key:
+		}		
+		case CollisionEngine::eShadowActivated:
 		{
-			Key* collidedKey = dynamic_cast<Key*>(collidedActor);
-			assert(collidedKey);
-			if (!m_player.HasKey())
-			{
-				m_player.PickupKey(collidedKey);
-				collidedKey->Remove();
-				aActor.SetPosition(newX, newY);
-				AudioManager::GetInstance()->PlayKeyPickupSound();
-			}
-			break;
-		}
-		case ActorType::ShadowActivator:
-		{
-			// NOTE- We should only ever get here if the actor passed into this funciton is a player!
-			assert(aActor.GetType() == ActorType::Player);
-
-			// No need to cast, just remove the shadow activator element.
-			collidedActor->Remove();
-
-			// Set the position of the player
-			m_player.SetPosition(newX, newY);
-
 			// Activate the shadow player
 			// NOTE- not the best practice because we don't know where anything is!
 			int shadowStartX = m_pLevel->GetWidth() - 2;
@@ -243,43 +217,18 @@ void GameplayState::HandleCollision(PlacableActor& aActor, int newX, int newY)
 			AudioManager::GetInstance()->PlayShadowActivatedSound();
 			break;
 		}
-		case ActorType::Door:
+		case CollisionEngine::ePlayerDeath:
 		{
-			Door* collidedDoor = dynamic_cast<Door*>(collidedActor);
-			assert(collidedDoor);
-			if (!collidedDoor->IsOpen())
-			{
-				if (m_player.HasKey(collidedDoor->GetColor()))
-				{
-					collidedDoor->Open();
-					collidedDoor->Remove();
-					m_player.UseKey();
-					aActor.SetPosition(newX, newY);
-					AudioManager::GetInstance()->PlayDoorOpenSound();
-				}
-				else
-				{
-					AudioManager::GetInstance()->PlayDoorClosedSound();
-				}
-			}
-			else
-			{
-				aActor.SetPosition(newX, newY);
-			}
+			AudioManager::GetInstance()->PlayLoseSound();
+			m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Lose);
 			break;
 		}
-		case ActorType::Goal:
+		case CollisionEngine::ePlayerHitGoal:
 		{
-			Goal* collidedGoal = dynamic_cast<Goal*>(collidedActor);
-			assert(collidedGoal);
-			collidedGoal->Remove();
-			aActor.SetPosition(newX, newY);
 			m_beatLevel = true;
 			AudioManager::GetInstance()->PlayNextLevelSound();
 			break;
 		}
-		default:
-			break;
 		}
 	}
 	else if (m_pLevel->IsSpace(newX, newY)) // no collision
