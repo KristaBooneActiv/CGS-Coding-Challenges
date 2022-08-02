@@ -42,9 +42,9 @@ public:
 	void Remove() { m_IsActive = false; }
 	bool IsActive() { return m_IsActive; }
 	void Place(int x, int y);
+	void Draw() const;
 
 	virtual ActorType GetType() = 0;
-	virtual void Draw() const;
 	virtual void Update()
 	{
 

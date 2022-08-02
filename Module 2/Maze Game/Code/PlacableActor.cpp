@@ -50,6 +50,14 @@ void PlacableActor::Place(int x, int y)
 	m_IsActive = true;
 }
 
+// =============================================================
+// Refactored Draw method so that it enforces each actor that is
+// drawn takes up a single character on the screen.
+// 
+// Benefits:
+//  - PlacableActors do not draw more than assumed
+//  - Reduce duplicate code calling SetConsoleTextAttribute
+// =============================================================
 void PlacableActor::Draw() const
 {
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
