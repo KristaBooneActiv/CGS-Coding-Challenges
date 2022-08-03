@@ -34,7 +34,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Module 3", "Module 3", "{AF
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Chapter 1", "Module 3\Chapter 1\Chapter 1.vcxproj", "{590EAC08-35BF-40CE-BFB1-A8A27EB22646}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Chapter3", "Module 3\Chapter3\Chapter3.vcxproj", "{C9C3CDC7-39CE-4966-B2A6-C94B0D4F69D8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Chapter 3", "Module 3\Chapter3\Chapter3.vcxproj", "{C9C3CDC7-39CE-4966-B2A6-C94B0D4F69D8}"
+EndProject
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
