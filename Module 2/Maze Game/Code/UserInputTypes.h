@@ -14,6 +14,7 @@ namespace inputKey
 	constexpr int ARROW_RIGHT = 77;
 
 	constexpr int ESCAPE = 27;
+	constexpr int ENTER = 13;
 
 	constexpr int ONE = 49;
 	constexpr int TWO = 50;

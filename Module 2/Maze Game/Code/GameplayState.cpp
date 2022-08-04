@@ -324,6 +324,7 @@ void GameplayState::movePlayer(int aX, int aY)
 void GameplayState::playerQuit()
 {
 	m_pOwner->LoadScene(StateMachineExampleGame::SceneName::MainMenu);
+	m_userInputMgr.interrupt();
 }
 
 void GameplayState::playerDropKey()

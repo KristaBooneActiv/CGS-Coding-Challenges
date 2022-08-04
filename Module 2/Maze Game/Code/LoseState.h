@@ -1,18 +1,22 @@
 #pragma once
-#include "IGameState.h"
+#include "GameStateWithInput.h"
 
 class StateMachineExampleGame;
 
-class LoseState : public IGameState
+class LoseState : public GameStateWithInput
 {
-	StateMachineExampleGame* m_pOwner;
-
 public:
 	LoseState(StateMachineExampleGame* pOwner);
 	~LoseState() = default;
 
 	virtual bool Update() override;
 	virtual void Draw() override;
+
+private:
+	StateMachineExampleGame* m_pOwner;
+	bool m_doDraw;
+
+	void QuitToMain();
 };
 
 

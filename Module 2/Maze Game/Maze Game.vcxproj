@@ -29,7 +29,6 @@
     <ClInclude Include="Code\IGameState.h" />
     <ClInclude Include="Code\GameStateMachine.h" />
     <ClInclude Include="Code\Goal.h" />
-    <ClInclude Include="Code\HighScore.h" />
     <ClInclude Include="Code\HighScoreState.h" />
     <ClInclude Include="Code\Key.h" />
     <ClInclude Include="Code\Level.h" />
@@ -56,7 +55,6 @@
     <ClCompile Include="Code\Game.cpp" />
     <ClCompile Include="Code\GameplayState.cpp" />
     <ClCompile Include="Code\Goal.cpp" />
-    <ClCompile Include="Code\HighScore.cpp" />
     <ClCompile Include="Code\HighScoreState.cpp" />
     <ClCompile Include="Code\Key.cpp" />
     <ClCompile Include="Code\Level.cpp" />

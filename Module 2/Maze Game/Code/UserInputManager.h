@@ -17,6 +17,7 @@ public:
 	void addInputCallback(UserInputTypeId aInputKey,
 		                  Callback aCallback);
 	void start();
+	void interrupt() { mInterrupt = true; }
 	void end();
 
 private:

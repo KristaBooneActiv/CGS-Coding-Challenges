@@ -63,4 +63,5 @@ void SettingsState::toggleSound()
 void SettingsState::quitToMain()
 {
 	m_pOwner->LoadScene(StateMachineExampleGame::SceneName::MainMenu);
+	m_userInputMgr.interrupt();
 }

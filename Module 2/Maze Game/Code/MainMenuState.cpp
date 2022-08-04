@@ -44,19 +44,23 @@ void MainMenuState::Draw()
 void MainMenuState::LoadGameplay()
 {
 	m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Gameplay);
+	m_userInputMgr.interrupt();
 }
 
 void MainMenuState::LoadHighScores()
 {
 	m_pOwner->LoadScene(StateMachineExampleGame::SceneName::HighScore);
+	m_userInputMgr.interrupt();
 }
 
 void MainMenuState::LoadSettings()
 {
 	m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Settings);
+	m_userInputMgr.interrupt();
 }
 
 void MainMenuState::SetQuit()
 {
 	m_shouldQuit = true;
+	m_userInputMgr.interrupt();
 }

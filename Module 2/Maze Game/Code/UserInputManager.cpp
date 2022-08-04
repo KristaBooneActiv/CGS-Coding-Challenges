@@ -16,7 +16,7 @@ void UserInputManager::start()
 
 void UserInputManager::end()
 {
-	mInterrupt = true;
+	interrupt();
 	if (mThread.joinable())
 	{
 		mThread.join();
