@@ -42,6 +42,7 @@
     <ClInclude Include="Code\ShadowActivator.h" />
     <ClInclude Include="Code\ShadowPlayer.h" />
     <ClInclude Include="Code\StateMachineExampleGame.h" />
+    <ClInclude Include="Code\UserInputThread.h" />
     <ClInclude Include="Code\Utility.h" />
     <ClInclude Include="Code\WinState.h" />
   </ItemGroup>
@@ -67,6 +68,7 @@
     <ClCompile Include="Code\ShadowActivator.cpp" />
     <ClCompile Include="Code\ShadowPlayer.cpp" />
     <ClCompile Include="Code\StateMachineExampleGame.cpp" />
+    <ClCompile Include="Code\UserInputThread.cpp" />
     <ClCompile Include="Code\WinState.cpp" />
   </ItemGroup>
   <ItemGroup>

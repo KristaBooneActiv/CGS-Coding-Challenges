@@ -18,13 +18,6 @@
 
 using namespace std;
 
-constexpr int kArrowInput = 224;
-constexpr int kLeftArrow = 75;
-constexpr int kRightArrow = 77;
-constexpr int kUpArrow = 72;
-constexpr int kDownArrow = 80;
-constexpr int kEscapeKey = 27;
-
 GameplayState::GameplayState(StateMachineExampleGame* pOwner)
 	: m_pOwner(pOwner)
 	, m_beatLevel(false)
@@ -33,6 +26,7 @@ GameplayState::GameplayState(StateMachineExampleGame* pOwner)
 	, m_pLevel(nullptr)
 	, m_playerShadow(nullptr)
 	, m_collisionEngine()
+	, m_userInputThread(std::bind(&GameplayState::ProcessInput, this, std::placeholders::_1))
 {
 	m_LevelNames.push_back("Level1.txt");
 	m_LevelNames.push_back("Level2.txt");
@@ -77,98 +71,105 @@ void GameplayState::Enter()
 	{
 		throw std::runtime_error("FATAL ERROR: Unable to load level file");
 	}
+	m_userInputThread.start();
+}
+
+void GameplayState::Exit()
+{
+	// TODO- join input thread and update thread here
+	m_userInputThread.end();
+}
+
+void GameplayState::ProcessInput(UserInputType aInput)
+{
+	bool playerMoved = false;
+	int newPlayerX = m_player.GetXPosition();
+	int newPlayerY = m_player.GetYPosition();
+
+	int shadowPlayerDeltaX = 0;
+	int shadowPlayerDeltaY = 0;
+
+	switch (aInput)
+	{
+	case UserInputType::eMoveUp:
+	{
+		playerMoved = true;
+		newPlayerY--;
+		shadowPlayerDeltaY = 1;
+		break;
+	}
+	case UserInputType::eMoveDown:
+	{
+		playerMoved = true;
+		newPlayerY++;
+		shadowPlayerDeltaY = -1;
+		break;
+	}
+	case UserInputType::eMoveLeft:
+	{
+		playerMoved = true;
+		newPlayerX--;
+		shadowPlayerDeltaX = 1;
+		break;
+	}
+	case UserInputType::eMoveRight:
+	{
+		playerMoved = true;
+		newPlayerX++;
+		shadowPlayerDeltaX = -1;
+		break;
+	}
+	case UserInputType::eExit:
+	{
+		m_pOwner->LoadScene(StateMachineExampleGame::SceneName::MainMenu);
+		break;
+	}
+	case UserInputType::eDropKey:
+	{
+		m_player.DropKey();
+		break;
+	}
+	}
+
+	if (playerMoved)
+	{
+		HandleCollision(m_player, newPlayerX, newPlayerY);
+
+		// Move the shadow, if active and handle collisions
+		if (m_playerShadow)
+		{
+			HandleCollision(*m_playerShadow,
+				m_playerShadow->GetXPosition() + shadowPlayerDeltaX,
+				m_playerShadow->GetYPosition() + shadowPlayerDeltaY);
+		}
+	}
 }
 
 bool GameplayState::Update(bool processInput)
 {
-	if (processInput && !m_beatLevel)
+	++m_skipFrameCount;
+	if (m_skipFrameCount > kFramesToSkip)
 	{
-		int input = _getch();
-		int arrowInput = 0;
-		int newPlayerX = m_player.GetXPosition();
-		int newPlayerY = m_player.GetYPosition();
+ 		m_pLevel->UpdateActors(m_player.GetXPosition(), m_player.GetYPosition());
+		m_skipFrameCount = 0;
+	}
 
-		int shadowPlayerDeltaX = 0;
-		int shadowPlayerDeltaY = 0;
+	if (m_beatLevel)
+	{
+		++m_currentLevel;
+		if (m_currentLevel == m_LevelNames.size())
+		{
+			Utility::WriteHighScore(m_player.GetMoney());
+			AudioManager::GetInstance()->PlayWinSound();
 
-		// One of the arrow keys were pressed
-		if (input == kArrowInput)
-		{
-			arrowInput = _getch();
-		}
-
-		if ((input == kArrowInput && arrowInput == kLeftArrow) ||
-			(char)input == 'A' || (char)input == 'a')
-		{
-			newPlayerX--;
-			shadowPlayerDeltaX = 1;
-		}
-		else if ((input == kArrowInput && arrowInput == kRightArrow) ||
-			(char)input == 'D' || (char)input == 'd')
-		{
-			newPlayerX++;
-			shadowPlayerDeltaX = -1;
-		}
-		else if ((input == kArrowInput && arrowInput == kUpArrow) ||
-			(char)input == 'W' || (char)input == 'w')
-		{
-			newPlayerY--;
-			shadowPlayerDeltaY = 1;
-		}
-		else if ((input == kArrowInput && arrowInput == kDownArrow) ||
-			(char)input == 'S' || (char)input == 's')
-		{
-			newPlayerY++;
-			shadowPlayerDeltaY = -1;
-		}
-		else if (input == kEscapeKey)
-		{
-			m_pOwner->LoadScene(StateMachineExampleGame::SceneName::MainMenu);
-		}
-		else if ((char)input == 'Z' || (char)input == 'z')
-		{
-			m_player.DropKey();
-		}
-
-		// If position never changed
-		if (newPlayerX == m_player.GetXPosition() && newPlayerY == m_player.GetYPosition())
-		{
-			//return false;
+			m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Win);
 		}
 		else
 		{
-			HandleCollision(m_player, newPlayerX, newPlayerY);
-
-			// Move the shadow, if active and handle collisions
-			if (m_playerShadow)
-			{
-				HandleCollision(*m_playerShadow,
-					m_playerShadow->GetXPosition() + shadowPlayerDeltaX,
-					m_playerShadow->GetYPosition() + shadowPlayerDeltaY);
-			}
-		}
-	}
-	if (m_beatLevel)
-	{
-		++m_skipFrameCount;
-		if (m_skipFrameCount > kFramesToSkip)
-		{
 			m_beatLevel = false;
-			m_skipFrameCount = 0;
-			++m_currentLevel;
-			if (m_currentLevel == m_LevelNames.size())
-			{
-				Utility::WriteHighScore(m_player.GetMoney());
-				AudioManager::GetInstance()->PlayWinSound();
-				
-				m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Win);
-			}
-			else
-			{
-				// On to the next level
-				Load();
-			}
 
+			// On to the next level
+			Load();
 		}
 	}
 

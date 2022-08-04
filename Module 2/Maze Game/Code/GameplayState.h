@@ -10,27 +10,12 @@
 #include <vector>
 #include <string>
 
+#include "UserInputThread.h"
+
 class StateMachineExampleGame;
 
 class GameplayState : public GameState
 {
-	StateMachineExampleGame* m_pOwner;
-
-	CollisionEngine m_collisionEngine;
-	
-	Player m_player;
-	Level* m_pLevel;
-
-	ShadowPlayer* m_playerShadow;
-
-	bool m_beatLevel;
-	int m_skipFrameCount;
-	static constexpr int kFramesToSkip = 2;
-
-	int m_currentLevel;
-
-	std::vector<std::string> m_LevelNames;
-
 public:
 	GameplayState(StateMachineExampleGame* pOwner);
 	~GameplayState();
@@ -38,8 +23,27 @@ public:
 	virtual void Enter() override;
 	virtual bool Update(bool processInput = true) override;
 	virtual void Draw() override;
+	virtual void Exit() override;
+
+	void ProcessInput(UserInputType aInput);
 
 private:
+	StateMachineExampleGame* m_pOwner;
+	CollisionEngine m_collisionEngine;
+	std::vector<std::string> m_LevelNames;
+
+	Level* m_pLevel;
+	Player m_player;
+	ShadowPlayer* m_playerShadow;
+
+	UserInputThread m_userInputThread;
+
+	bool m_beatLevel;
+	int m_currentLevel;
+
+	int m_skipFrameCount;
+	static constexpr int kFramesToSkip = 10;
+
 	void HandleCollision(PlacableActor& aActor, int newX, int newY);
 	bool Load();
 	void DrawHUD(const HANDLE& console);
