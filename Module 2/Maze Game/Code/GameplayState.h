@@ -1,5 +1,5 @@
 #pragma once
-#include "GameState.h"
+#include "GameStateWithInput.h"
 #include "Player.h"
 #include "ShadowPlayer.h"
 #include "Level.h"
@@ -10,22 +10,19 @@
 #include <vector>
 #include <string>
 
-#include "UserInputThread.h"
+#include "UserInputManager.h"
 
 class StateMachineExampleGame;
 
-class GameplayState : public GameState
+class GameplayState : public GameStateWithInput
 {
 public:
 	GameplayState(StateMachineExampleGame* pOwner);
 	~GameplayState();
 
 	virtual void Enter() override;
-	virtual bool Update(bool processInput = true) override;
+	virtual bool Update() override;
 	virtual void Draw() override;
-	virtual void Exit() override;
-
-	void ProcessInput(UserInputType aInput);
 
 private:
 	StateMachineExampleGame* m_pOwner;
@@ -36,8 +33,6 @@ private:
 	Player m_player;
 	ShadowPlayer* m_playerShadow;
 
-	UserInputThread m_userInputThread;
-
 	bool m_beatLevel;
 	int m_currentLevel;
 
@@ -47,4 +42,15 @@ private:
 	void HandleCollision(PlacableActor& aActor, int newX, int newY);
 	bool Load();
 	void DrawHUD(const HANDLE& console);
+
+	// Functions called when input occurs
+	void movePlayerUp();
+	void movePlayerDown();
+	void movePlayerLeft();
+	void movePlayerRight();
+
+	void movePlayer(int aX, int aY);
+
+	void playerQuit();
+	void playerDropKey();
 };

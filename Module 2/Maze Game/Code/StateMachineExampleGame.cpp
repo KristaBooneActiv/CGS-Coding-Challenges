@@ -20,7 +20,7 @@ bool StateMachineExampleGame::Init()
 	return true;
 }
 
-bool StateMachineExampleGame::UpdateCurrentState(bool processInput)
+bool StateMachineExampleGame::UpdateCurrentState()
 {
 	bool done = false;
 	if (m_pNextState != nullptr)
@@ -31,7 +31,7 @@ bool StateMachineExampleGame::UpdateCurrentState(bool processInput)
 
 	if (m_pCurrentState != nullptr)
 	{
-		done = m_pCurrentState->Update(processInput);
+		done = m_pCurrentState->Update();
 	}
 	return done;
 }
@@ -44,7 +44,7 @@ void StateMachineExampleGame::DrawCurrentState()
 	}
 }
 
-void StateMachineExampleGame::ChangeState(GameState* pNewState)
+void StateMachineExampleGame::ChangeState(IGameState* pNewState)
 {
 	if (m_pCurrentState != nullptr)
 	{

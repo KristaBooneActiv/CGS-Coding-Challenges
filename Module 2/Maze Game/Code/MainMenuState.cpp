@@ -1,57 +1,62 @@
-#include "MainMenuState.h"
-
 #include <iostream>
-#include <conio.h>
-
+#include "MainMenuState.h"
 #include "StateMachineExampleGame.h"
 
 using namespace std;
 
-constexpr int kEscapeKey = 27;
-
-constexpr char kPlay = '1';
-constexpr char kHighScore = '2';
-constexpr char kSettings = '3';
-constexpr char kQuit = '4';
-
 MainMenuState::MainMenuState(StateMachineExampleGame* pOwner)
 	: m_pOwner(pOwner)
+	, m_shouldQuit(false)
+	, m_didDraw(false)
 {
+	m_userInputMgr.addInputCallback(inputKey::ONE, std::bind(&MainMenuState::LoadGameplay, this));
+	m_userInputMgr.addInputCallback(inputKey::TWO, std::bind(&MainMenuState::LoadHighScores, this));
+	m_userInputMgr.addInputCallback(inputKey::THREE, std::bind(&MainMenuState::LoadSettings, this));
+	
+	{
+		auto fp = std::bind(&MainMenuState::SetQuit, this);
+		m_userInputMgr.addInputCallback(inputKey::ESCAPE, fp);
+		m_userInputMgr.addInputCallback(inputKey::FOUR, fp);
+	}
 }
 
-bool MainMenuState::Update(bool processInput)
+bool MainMenuState::Update()
 {
-	bool shouldQuit = false;
-	if (processInput)
-	{
-		int input = _getch();
-		if (input == kEscapeKey || (char)input == kQuit)
-		{
-			shouldQuit = true;
-		}
-		else if ((char)input == kPlay)
-		{
-			m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Gameplay);
-		}
-		else if ((char)input == kHighScore)
-		{
-			m_pOwner->LoadScene(StateMachineExampleGame::SceneName::HighScore);
-		}
-		else if ((char)input == kSettings)
-		{
-			m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Settings);
-		}
-	}
-	return shouldQuit;
+	return m_shouldQuit;
 }
 
 void MainMenuState::Draw()
 {
-	system("cls");
-	cout << endl << endl << endl;
-	cout << "          - - - MAIN MENU - - -" << endl << endl;
-	cout << "             " << kPlay << ". Play " << endl;
-	cout << "             " << kHighScore << ". High Score " << endl;
-	cout << "             " << kSettings << ". Settings " << endl;
-	cout << "             " << kQuit << ". Quit " << endl;
+	// We really only need to draw this once.
+	if (!m_didDraw)
+	{
+		system("cls");
+		cout << endl << endl << endl;
+		cout << "          - - - MAIN MENU - - -" << endl << endl;
+		cout << "             " << (char)inputKey::ONE << ". Play " << endl;
+		cout << "             " << (char)inputKey::TWO << ". High Score " << endl;
+		cout << "             " << (char)inputKey::THREE << ". Settings " << endl;
+		cout << "             " << (char)inputKey::FOUR << ". Quit " << endl;
+		m_didDraw = true;
+	}
+}
+
+void MainMenuState::LoadGameplay()
+{
+	m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Gameplay);
+}
+
+void MainMenuState::LoadHighScores()
+{
+	m_pOwner->LoadScene(StateMachineExampleGame::SceneName::HighScore);
+}
+
+void MainMenuState::LoadSettings()
+{
+	m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Settings);
+}
+
+void MainMenuState::SetQuit()
+{
+	m_shouldQuit = true;
 }

@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <conio.h>
-#include <windows.h>
 #include <assert.h>
 #include <exception>
 
@@ -26,11 +25,46 @@ GameplayState::GameplayState(StateMachineExampleGame* pOwner)
 	, m_pLevel(nullptr)
 	, m_playerShadow(nullptr)
 	, m_collisionEngine()
-	, m_userInputThread(std::bind(&GameplayState::ProcessInput, this, std::placeholders::_1))
 {
 	m_LevelNames.push_back("Level1.txt");
 	m_LevelNames.push_back("Level2.txt");
 	m_LevelNames.push_back("Level3.txt");
+
+	// Set up user input manager callbacks
+	{
+		auto fp = std::bind(&GameplayState::movePlayerUp, this);
+		m_userInputMgr.addInputCallback(inputKey::ARROW_UP, fp);
+		m_userInputMgr.addInputCallback('W', fp);
+		m_userInputMgr.addInputCallback('w', fp);
+	}
+	{
+		auto fp = std::bind(&GameplayState::movePlayerDown, this);
+		m_userInputMgr.addInputCallback(inputKey::ARROW_DOWN, fp);
+		m_userInputMgr.addInputCallback('S', fp);
+		m_userInputMgr.addInputCallback('s', fp);
+	}
+	{
+		auto fp = std::bind(&GameplayState::movePlayerLeft, this);
+		m_userInputMgr.addInputCallback(inputKey::ARROW_LEFT, fp);
+		m_userInputMgr.addInputCallback('A', fp);
+		m_userInputMgr.addInputCallback('a', fp);
+	}
+	{
+		auto fp = std::bind(&GameplayState::movePlayerRight, this);
+		m_userInputMgr.addInputCallback(inputKey::ARROW_RIGHT, fp);
+		m_userInputMgr.addInputCallback('D', fp);
+		m_userInputMgr.addInputCallback('d', fp);
+	}
+	{
+		auto fp = std::bind(&GameplayState::playerDropKey, this);
+		m_userInputMgr.addInputCallback('Z', fp);
+		m_userInputMgr.addInputCallback('z', fp);
+	}
+	{
+		auto fp = std::bind(&GameplayState::playerQuit, this);
+		m_userInputMgr.addInputCallback('Q', fp);
+		m_userInputMgr.addInputCallback('q', fp);
+	}
 	AudioManager::GetInstance()->PlayMainTheme();
 }
 
@@ -71,81 +105,10 @@ void GameplayState::Enter()
 	{
 		throw std::runtime_error("FATAL ERROR: Unable to load level file");
 	}
-	m_userInputThread.start();
+	GameStateWithInput::Enter();
 }
 
-void GameplayState::Exit()
-{
-	// TODO- join input thread and update thread here
-	m_userInputThread.end();
-}
-
-void GameplayState::ProcessInput(UserInputType aInput)
-{
-	bool playerMoved = false;
-	int newPlayerX = m_player.GetXPosition();
-	int newPlayerY = m_player.GetYPosition();
-
-	int shadowPlayerDeltaX = 0;
-	int shadowPlayerDeltaY = 0;
-
-	switch (aInput)
-	{
-	case UserInputType::eMoveUp:
-	{
-		playerMoved = true;
-		newPlayerY--;
-		shadowPlayerDeltaY = 1;
-		break;
-	}
-	case UserInputType::eMoveDown:
-	{
-		playerMoved = true;
-		newPlayerY++;
-		shadowPlayerDeltaY = -1;
-		break;
-	}
-	case UserInputType::eMoveLeft:
-	{
-		playerMoved = true;
-		newPlayerX--;
-		shadowPlayerDeltaX = 1;
-		break;
-	}
-	case UserInputType::eMoveRight:
-	{
-		playerMoved = true;
-		newPlayerX++;
-		shadowPlayerDeltaX = -1;
-		break;
-	}
-	case UserInputType::eExit:
-	{
-		m_pOwner->LoadScene(StateMachineExampleGame::SceneName::MainMenu);
-		break;
-	}
-	case UserInputType::eDropKey:
-	{
-		m_player.DropKey();
-		break;
-	}
-	}
-
-	if (playerMoved)
-	{
-		HandleCollision(m_player, newPlayerX, newPlayerY);
-
-		// Move the shadow, if active and handle collisions
-		if (m_playerShadow)
-		{
-			HandleCollision(*m_playerShadow,
-				m_playerShadow->GetXPosition() + shadowPlayerDeltaX,
-				m_playerShadow->GetYPosition() + shadowPlayerDeltaY);
-		}
-	}
-}
-
-bool GameplayState::Update(bool processInput)
+bool GameplayState::Update()
 {
 	++m_skipFrameCount;
 	if (m_skipFrameCount > kFramesToSkip)
@@ -320,4 +283,50 @@ void GameplayState::DrawHUD(const HANDLE& console)
 		cout << Level::WAL;
 	}
 	cout << endl;
+}
+
+void GameplayState::movePlayerUp()
+{
+	movePlayer(0, -1);
+}
+
+void GameplayState::movePlayerDown()
+{
+	movePlayer(0, 1);
+}
+
+void GameplayState::movePlayerLeft()
+{
+	movePlayer(-1, 0);
+}
+
+void GameplayState::movePlayerRight()
+{
+	movePlayer(1, 0);
+}
+
+void GameplayState::movePlayer(int aX, int aY)
+{
+	int newPlayerX = m_player.GetXPosition() + aX;
+	int newPlayerY = m_player.GetYPosition() + aY;
+
+	HandleCollision(m_player, newPlayerX, newPlayerY);
+
+	// Move the shadow, if active and handle collisions
+	if (m_playerShadow)
+	{
+		HandleCollision(*m_playerShadow,
+			m_playerShadow->GetXPosition() + aX*-1,
+			m_playerShadow->GetYPosition() + aY*-1);
+	}
+}
+
+void GameplayState::playerQuit()
+{
+	m_pOwner->LoadScene(StateMachineExampleGame::SceneName::MainMenu);
+}
+
+void GameplayState::playerDropKey()
+{
+	m_player.DropKey();
 }

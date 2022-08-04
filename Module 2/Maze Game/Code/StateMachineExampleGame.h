@@ -2,7 +2,7 @@
 #include "GameStateMachine.h"
 
 class Game;
-class GameState;
+class IGameState;
 
 class StateMachineExampleGame : public GameStateMachine
 {
@@ -21,16 +21,16 @@ public:
 private:
 	Game* m_pOwner;
 
-	GameState* m_pCurrentState;
-	GameState* m_pNextState;
+	IGameState* m_pCurrentState;
+	IGameState* m_pNextState;
 
 public:
 	StateMachineExampleGame(Game* pOwner);
 
 	virtual bool Init() override;
-	virtual bool UpdateCurrentState(bool processInput = true) override;
+	virtual bool UpdateCurrentState() override;
 	virtual void DrawCurrentState() override;
-	virtual void ChangeState(GameState* pNewState) override;
+	virtual void ChangeState(IGameState* pNewState) override;
 	void LoadScene(SceneName scene);
 	virtual bool Cleanup() override;
 };

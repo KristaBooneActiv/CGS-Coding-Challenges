@@ -1,16 +1,22 @@
 #pragma once
-#include "GameState.h"
+#include "GameStateWithInput.h"
+#include "UserInputManager.h"
 
 class StateMachineExampleGame;
 
-class SettingsState : public GameState
+class SettingsState : public GameStateWithInput
 {
-	StateMachineExampleGame* m_pOwner;
-
 public:
 	SettingsState(StateMachineExampleGame* pOwner);
 	~SettingsState() = default;
 
-	virtual bool Update(bool processInput = true) override;
+	virtual bool Update() override;
 	virtual void Draw() override;
+
+private:
+	StateMachineExampleGame* m_pOwner;
+	bool                     m_shouldDraw;
+
+	void toggleSound();
+	void quitToMain();
 };

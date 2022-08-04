@@ -21,28 +21,16 @@ void Game::RunGameLoop()
 	bool isGameOver = false;
 	while (!isGameOver)
 	{
-		// update with no input
-		Update(false);
+		// Update
+		isGameOver = m_pStateMachine->UpdateCurrentState();
+
 		// Draw
-		Draw();
-		// Update with input
-		isGameOver = Update();
+		m_pStateMachine->DrawCurrentState();
 	}
-	Draw();
 }
 
 void Game::Deinitialize()
 {
 	if (m_pStateMachine != nullptr)
 		m_pStateMachine->Cleanup();
-}
-
-bool Game::Update(bool processInput)
-{
-	return m_pStateMachine->UpdateCurrentState(processInput);
-}
-
-void Game::Draw()
-{
-	m_pStateMachine->DrawCurrentState();
 }

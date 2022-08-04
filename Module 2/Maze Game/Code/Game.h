@@ -11,8 +11,4 @@ public:
 	void Initialize(GameStateMachine* pStateMachine);
 	void RunGameLoop();
 	void Deinitialize();
-
-private:
-	bool Update(bool processInput = true);
-	void Draw();
 };

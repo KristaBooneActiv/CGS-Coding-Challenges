@@ -1,9 +1,9 @@
 #pragma once
-#include "GameState.h"
+#include "IGameState.h"
 
 class StateMachineExampleGame;
 
-class WinState : public GameState
+class WinState : public IGameState
 {
 	StateMachineExampleGame* m_pOwner;
 
@@ -11,6 +11,6 @@ public:
 	WinState(StateMachineExampleGame* pOwner);
 	~WinState() = default;
 
-	virtual bool Update(bool processInput = true) override;
+	virtual bool Update() override;
 	virtual void Draw() override;
 };

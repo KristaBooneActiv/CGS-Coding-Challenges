@@ -14,43 +14,53 @@ constexpr char kMainMenu = '2';
 
 SettingsState::SettingsState(StateMachineExampleGame* pOwner)
 	: m_pOwner(pOwner)
+	, m_shouldDraw(true)
 {
+	m_userInputMgr.addInputCallback(inputKey::ONE, std::bind(&SettingsState::toggleSound, this));
+	{
+		auto fp = std::bind(&SettingsState::quitToMain, this);
+		m_userInputMgr.addInputCallback(inputKey::TWO, fp);
+		m_userInputMgr.addInputCallback(inputKey::ESCAPE, fp);
+	}
 }
 
-bool SettingsState::Update(bool processInput)
+bool SettingsState::Update()
 {
-	if (processInput)
-	{
-		int input = _getch();
-		if (input == kEscapeKey || (char)input == kMainMenu)
-		{
-			m_pOwner->LoadScene(StateMachineExampleGame::SceneName::MainMenu);
-		}
-		else if ((char)input == kSound)
-		{
-			AudioManager::GetInstance()->ToggleSound();
-			if (AudioManager::GetInstance()->IsSoundOn())
-			{
-				AudioManager::GetInstance()->PlayMoneySound();
-			}
-		}
-	}
 	return false;
 }
 
 void SettingsState::Draw()
 {
-	system("cls");
-	cout << endl << endl << endl;
-	cout << "          - - - Settings - - -" << endl << endl;
-	cout << "             " << kSound << ". Toggle Sound: ";
+	if (m_shouldDraw)
+	{
+		system("cls");
+		cout << endl << endl << endl;
+		cout << "          - - - Settings - - -" << endl << endl;
+		cout << "             " << kSound << ". Toggle Sound: ";
+		if (AudioManager::GetInstance()->IsSoundOn())
+		{
+			cout << "ON" << endl;
+		}
+		else
+		{
+			cout << "OFF" << endl;
+		}
+		cout << "             " << kMainMenu << ". Back to Main Menu " << endl;
+		m_shouldDraw = false;
+	}	
+}
+
+void SettingsState::toggleSound()
+{
+	AudioManager::GetInstance()->ToggleSound();
 	if (AudioManager::GetInstance()->IsSoundOn())
 	{
-		cout << "ON" << endl;
+		AudioManager::GetInstance()->PlayMoneySound();
 	}
-	else
-	{
-		cout << "OFF" << endl;
-	}
-	cout << "             " << kMainMenu << ". Back to Main Menu " << endl;
+	m_shouldDraw = true;
+}
+
+void SettingsState::quitToMain()
+{
+	m_pOwner->LoadScene(StateMachineExampleGame::SceneName::MainMenu);
 }
