@@ -24,8 +24,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Chapter 1", "Module 2\Chapt
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Module 2", "Module 2", "{EC6E8DCD-ED00-4926-851F-B44178625A30}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Chapter 2", "Module 2\Chapter 2\Chapter 2.vcxproj", "{8B6D8455-BACC-4019-B2AA-86A8A953BF04}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Maze Game", "Module 2\Maze Game\Maze Game.vcxproj", "{9FFAED25-22A0-4CF5-92AD-0E31E24EEBFA}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LevelEditor", "Module 2\Maze Game\LevelEditor\LevelEditor.vcxproj", "{344305F8-360B-4D6A-BAD3-62F8A483C66B}"
@@ -37,6 +35,14 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Chapter 4", "Module 3\Chapter 4\Chapter 4.vcxproj", "{65F87DAB-F52A-4E9A-95CF-A3087DFADA1C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Chapter 3", "Module 3\Chapter 3\Chapter 3.vcxproj", "{C9C3CDC7-39CE-4966-B2A6-C94B0D4F69D8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Module 4", "Module 4", "{35F4C0A9-91D5-42B5-9566-6022A7FB7C43}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chapter 1", "Chapter 1", "{1293EEB1-1945-45A7-8AAC-F1872C2081CE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Module 4\Chapter 1\Client\Client.vcxproj", "{65A78B38-F060-455F-A7D1-D388E6B54913}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server", "Module 4\Chapter 1\Server\Server.vcxproj", "{7A958A18-A8CC-4BB1-9463-8D755D20E7FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
