@@ -31,13 +31,25 @@ namespace util
         }
     }
 
+#undef max
+    // Get a string input from the user
+    static std::string GetUserInput(const std::string& aPrompt)
+    {
+        std::cout << aPrompt;
+
+        std::string input;
+        std::getline(std::cin, input);
+ 
+        return input;
+    }
+
     // Get a number from the user on standard input.
     // Returns empty optional if invalid number supplied.
     template <typename T>
     static std::optional<T> getNumberFromUser()
     {
         std::string userOption;
-        std::cin >> userOption;
+        std::getline(std::cin, userOption);
 
         std::optional<T> result;
         if (isInteger(userOption))
@@ -50,7 +62,7 @@ namespace util
     static std::optional<double> getDecimalNumberFromUser()
     {
         std::string userOption;
-        std::cin >> userOption;
+        std::getline(std::cin, userOption);
 
         std::optional<double> result;
         if (isNumber(userOption))
