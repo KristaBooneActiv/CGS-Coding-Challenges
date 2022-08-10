@@ -100,6 +100,8 @@ void Manager::SendMessagePacket()
     enet_host_broadcast(mHostPtr->GetENetHost(), 0, packet);
     /* One could just use enet_host_service() instead. */
     enet_host_flush(mHostPtr->GetENetHost());
+
+    delete[] data;
 }
 
 void Manager::tListenForMessages()
