@@ -31,7 +31,6 @@ namespace util
         }
     }
 
-#undef max
     // Get a string input from the user
     static std::string GetUserInput(const std::string& aPrompt)
     {

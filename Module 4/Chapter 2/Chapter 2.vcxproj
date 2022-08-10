@@ -76,7 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)../3rd Party/enet-1.3.17/include;$(ProjectDir)../../Common</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../3rd Party/enet-1.3.17/include;$(ProjectDir)../../Common;$(ProjectDir)../../Module 2/Maze Game/Code</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -94,7 +94,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)../3rd Party/enet-1.3.17/include;$(ProjectDir)../../Common</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../3rd Party/enet-1.3.17/include;$(ProjectDir)../../Common;$(ProjectDir)../../Module 2/Maze Game/Code</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -112,7 +112,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)../3rd Party/enet-1.3.17/include;$(ProjectDir)../../Common</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../3rd Party/enet-1.3.17/include;$(ProjectDir)../../Common;$(ProjectDir)../../Module 2/Maze Game/Code</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -130,7 +130,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)../3rd Party/enet-1.3.17/include;$(ProjectDir)../../Common</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../3rd Party/enet-1.3.17/include;$(ProjectDir)../../Common;$(ProjectDir)../../Module 2/Maze Game/Code</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
