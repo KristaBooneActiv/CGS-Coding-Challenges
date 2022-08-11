@@ -1,6 +1,6 @@
 #pragma once
 #include <enet/enet.h>
-#include <vector>
+#include <unordered_map>
 
 #include "NumberGuessingGame.h"
 #include "GamePacket.h"
@@ -14,14 +14,22 @@ public:
 	void Run();
 
 protected:
-	NumberGuessingGame       mGuessingGame;
+	NumberGuessingGame  mGuessingGame;
 
-	ENetHost*                mServerPtr;
-	std::atomic<bool>        mShouldShutdown;
+	static const int cUNSET_PLAYER_ID = INT_MAX;
+	static const int cPLAYER_1_SET_ID = 1;
+	static const int cPLAYER_2_SET_ID = 2;
 
-	std::vector<std::string> mPlayers;
+	int mPlayer1ID{ cUNSET_PLAYER_ID };
+	int mPlayer2ID{ cUNSET_PLAYER_ID };
+
+	ENetHost*           mServerPtr;
+	std::atomic<bool>   mShouldShutdown;
 
 	void tListenForShutdown();
 	void tListenForPackets();
-	void ProcessPacket(GamePacket* aPacketPtr);
+
+	void BroadcastPacket(GamePacket* aPacketPtr);
+	void SendPacket(GamePacket* aPacketPtr, ENetPeer* aPeerPtr);
+	void ProcessPacket(PlayerGuessPacket* aPacketPtr);
 };

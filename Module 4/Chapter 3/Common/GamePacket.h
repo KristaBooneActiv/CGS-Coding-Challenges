@@ -7,7 +7,8 @@
 enum GamePacketType 
 {
 	ePlayerGuess,
-	eServerWelcomeMessage,
+	eServerMessageToPlayer,
+	eServerGameStarting,
 	eServerGuessResponse,
 	eServerGuessResponseWithHint
 };
@@ -56,24 +57,45 @@ struct PlayerGuessPacket : public GamePacket
 
 // ===================================================
 // Server Packet Types
-struct ServerWelcomePacket : public GamePacket
+struct ServerMessageToPlayerPacket : public GamePacket
 {
-	std::string welcomeMessage {""};
+	std::string message{ "" };
 
-	ServerWelcomePacket() : GamePacket(eServerWelcomeMessage) {}
-	ServerWelcomePacket(const std::string& aWelcomeMessage)
-		: GamePacket(eServerWelcomeMessage)
-	    , welcomeMessage(aWelcomeMessage) {}
+	ServerMessageToPlayerPacket() : GamePacket(eServerMessageToPlayer) {}
+	ServerMessageToPlayerPacket(const std::string& aMessage)
+		: GamePacket(eServerMessageToPlayer)
+		, message(aMessage) {}
 
 	virtual void serialize(std::ostream& out) override
 	{
 		GamePacket::serialize(out);
-		out.write(welcomeMessage.c_str(), welcomeMessage.size() + 1);
+		out.write(message.c_str(), message.size() + 1);
 	}
 	virtual void deserialize(std::istream& in) override
 	{
 		GamePacket::deserialize(in);
-		std::getline(in, welcomeMessage, '\0');
+		std::getline(in, message, '\0');
+	}
+};
+
+struct ServerGameStartingPacket : public GamePacket
+{
+	std::string message{ "" };
+
+	ServerGameStartingPacket() : GamePacket(eServerGameStarting) {}
+	ServerGameStartingPacket(const std::string& aMessage)
+		: GamePacket(eServerGameStarting)
+		, message(aMessage) {}
+
+	virtual void serialize(std::ostream& out) override
+	{
+		GamePacket::serialize(out);
+		out.write(message.c_str(), message.size() + 1);
+	}
+	virtual void deserialize(std::istream& in) override
+	{
+		GamePacket::deserialize(in);
+		std::getline(in, message, '\0');
 	}
 };
 
@@ -148,9 +170,13 @@ static GamePacket* DeserializeGamePacket(const char* aData, size_t aDataLength)
 	{
 		return DeserializeGamePacketOfType<PlayerGuessPacket>(ss);
 	}
-	case eServerWelcomeMessage:
+	case eServerMessageToPlayer:
 	{
-		return DeserializeGamePacketOfType<ServerWelcomePacket>(ss);
+		return DeserializeGamePacketOfType<ServerMessageToPlayerPacket>(ss);
+	}
+	case eServerGameStarting:
+	{
+		return DeserializeGamePacketOfType<ServerGameStartingPacket>(ss);
 	}
 	case eServerGuessResponse:
 	{

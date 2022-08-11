@@ -8,7 +8,7 @@
 
 GameClient::GameClient()
 	: mClientPtr(nullptr)
-	, mWaitingForServerResponse(false)
+	, mWaitingForServerResponse(true)
 	, mGuessString("")
 {
 	mClientPtr = enet_host_create(NULL /* create a client host */,
@@ -24,6 +24,7 @@ GameClient::GameClient()
 
 GameClient::~GameClient()
 {
+	enet_peer_disconnect(mClientPtr->peers, 0);
 	enet_host_destroy(mClientPtr);
 }
 
@@ -37,7 +38,7 @@ bool GameClient::ConnectToServer()
 	ENetPeer* peer = enet_host_connect(mClientPtr, &address, 2, 0);
 	if (!peer)
 	{
-		std::cerr << "No available peers for initiating an ENet connection." << std::endl;
+		std::cerr << "[Error]: No available peers for initiating an ENet connection." << std::endl;
 		return false;
 	}
 
@@ -53,7 +54,7 @@ bool GameClient::ConnectToServer()
 	/* received. Reset the peer in the event the 5 seconds   */
 	/* had run out without any significant event.            */
 	enet_peer_reset(peer);
-	std::cout << "Connection to the server failed." << std::endl;
+	std::cout << "[Error]: Connection to the server failed." << std::endl;
 	return false;
 }
 
@@ -87,6 +88,7 @@ void GameClient::tListenForPackets()
 			{
 				auto packetPtr = DeserializeGamePacket((char*)event.packet->data, event.packet->dataLength);
 				ProcessPacket(packetPtr);
+				delete packetPtr;
 				break;
 			}
 			case ENET_EVENT_TYPE_CONNECT:
@@ -104,11 +106,10 @@ void GameClient::ProcessPacket(GamePacket* aPacketPtr)
 {
 	switch (aPacketPtr->type)
 	{
-	case GamePacketType::ePlayerGuess:
+	case GamePacketType::eServerMessageToPlayer:
 	{
-		// Write out that someone guessed a number
-		auto guessPtr = static_cast<PlayerGuessPacket*>(aPacketPtr);
-		std::cout << "The number " << guessPtr->number << " was guessed." << std::endl;
+		auto msgPtr = static_cast<ServerMessageToPlayerPacket*>(aPacketPtr);
+		std::cout << msgPtr->message << std::endl;
 		break;
 	}
 	case GamePacketType::eServerGuessResponse:
@@ -124,14 +125,15 @@ void GameClient::ProcessPacket(GamePacket* aPacketPtr)
 		auto guessPtr = static_cast<ServerResponseWithHintPacket*>(aPacketPtr);
 		PrintServerResponsePacket(guessPtr);
 
-		std::cout << "Hint: You should guess a " << (guessPtr->guessHigher ? "higher" : "lower") << " number." << std::endl;
+		std::cout << "[Server]: Hint- Try a " << (guessPtr->guessHigher ? "higher" : "lower") << " number." << std::endl;
 		mWaitingForServerResponse = false;
 		break;
 	}
-	case GamePacketType::eServerWelcomeMessage:
+	case GamePacketType::eServerGameStarting:
 	{
-		auto welcomePtr = static_cast<ServerWelcomePacket*>(aPacketPtr);
-		std::cout << welcomePtr->welcomeMessage << std::endl;
+		auto msgPtr = static_cast<ServerGameStartingPacket*>(aPacketPtr);
+		std::cout << msgPtr->message << std::endl;
+		mWaitingForServerResponse = false;
 		break;
 	}
 	}
@@ -139,14 +141,16 @@ void GameClient::ProcessPacket(GamePacket* aPacketPtr)
 
 void GameClient::PrintServerResponsePacket(ServerResponsePacket* aServerResponsePacket)
 {
-	std::cout << "That was " << (aServerResponsePacket->guessWasCorrect ? "correct! " : "incorrect... ");
+	std::cout << "[Server]: That was " << (aServerResponsePacket->guessWasCorrect ? "correct! " : "incorrect... ");
 	if (aServerResponsePacket->gameOver && aServerResponsePacket->guessWasCorrect)
 	{
 		std::cout << "You win!" << std::endl;
+		mShouldShutdown = true;
 	}
 	else if (aServerResponsePacket->gameOver)
 	{
 		std::cout << "You lose. :(" << std::endl;
+		mShouldShutdown = true;
 	}
 	else
 	{
@@ -192,14 +196,14 @@ void GameClient::CheckAndSendGuess()
 {
 	if (mWaitingForServerResponse)
 	{
-		std::cerr << "You must wait until the game has responded before guessing again!" << std::endl;
+		std::cerr << "[Error]: You must wait until the game has responded before guessing again!" << std::endl;
 		mGuessString.clear();
 		return;
 	}
 
 	if (!util::isNumber(mGuessString))
 	{
-		std::cerr << "That's not a number! Try again." << std::endl;
+		std::cerr << "[Error]: That's not a number! Try again." << std::endl;
 		mGuessString.clear();
 		return;
 	}

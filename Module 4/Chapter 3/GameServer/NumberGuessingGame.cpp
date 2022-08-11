@@ -5,7 +5,7 @@
 constexpr int cGUESSES_UNTIL_HINT_ACTIVATED = 3;
 
 NumberGuessingGame::NumberGuessingGame()
-	: mNumber(GenerateRandomNumber(1, 100))
+	: mNumber(GenerateRandomNumber(mRangeMin, mRangeMax))
 { /* no-op */ }
 
 NumberGuessingGame::NumberGuessingGame(int aNumber)
@@ -13,7 +13,9 @@ NumberGuessingGame::NumberGuessingGame(int aNumber)
 { /* no-op */ }
 
 NumberGuessingGame::NumberGuessingGame(int aRangeStart, int aRangeEnd)
-	: mNumber(GenerateRandomNumber(aRangeStart, aRangeEnd))
+	: mRangeMin(aRangeStart)
+	, mRangeMax(aRangeEnd)
+	, mNumber(GenerateRandomNumber(mRangeMin, mRangeMax))
 { /* no-op */ }
 
 NumberGuessingGame::GuessResponse NumberGuessingGame::IsNumber(int aNumber)
@@ -36,9 +38,16 @@ bool NumberGuessingGame::IsGameOver() const
 	return mGameOverFlag;
 }
 
+void NumberGuessingGame::Restart()
+{
+	mNumber = GenerateRandomNumber(mRangeMin, mRangeMax);
+	mGameOverFlag = false;
+	mNumGuesses = 0;
+}
+
 bool NumberGuessingGame::ShouldGiveHint() const
 {
-	return mNumGuesses > cGUESSES_UNTIL_HINT_ACTIVATED; // If player has gotten 3 incorrect guesses, give them a hint
+	return mNumGuesses >= cGUESSES_UNTIL_HINT_ACTIVATED; // If player has gotten 3 incorrect guesses, give them a hint
 }
 
 int NumberGuessingGame::GetMaxGuesses() const
