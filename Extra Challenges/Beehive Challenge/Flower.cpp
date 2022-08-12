@@ -1,7 +1,6 @@
 #include <mutex>
 #include <random>
 
-#include "Beehive.h"
 #include "Flower.h"
 #include "StandardOutputForThreads.h"
 
@@ -22,26 +21,26 @@ static std::mutex sProductAccess;    // Mutex for locking access to the product
 static bool sStopProduction = false; // Flag to stop production 
 static bool sProduct = false;        // Start with no product available
 
-Beehive::Beehive(size_t aTimerMin, size_t aTimerMax)
+Flower::Flower(size_t aTimerMin, size_t aTimerMax)
 	: mMinTimeToProduce(aTimerMin)
 	, mMaxTimeToProduce(aTimerMax)
 	, mId(IDGenerator::Get())
 {
-	mProductionThread = std::thread(&Beehive::tProduce, this);
+	mProductionThread = std::thread(&Flower::tProduce, this);
 }
 
-Beehive::~Beehive()
+Flower::~Flower()
 {
 	sStopProduction = true;
 	mProductionThread.join();
 }
 
-void Beehive::StopProduction()
+void Flower::StopProduction()
 {
 	sStopProduction = true;
 }
 
-Honey Beehive::GetHoney()
+Pollen Flower::GetPollen()
 {
 	std::lock_guard<std::mutex> accessLock(sProductAccess);
 	if (sProduct)
@@ -55,7 +54,7 @@ Honey Beehive::GetHoney()
 	}
 }
 
-void Beehive::tProduce()
+void Flower::tProduce()
 {
 	while (!sStopProduction)
 	{
@@ -63,18 +62,13 @@ void Beehive::tProduce()
 		size_t sleepTime_s = GetRandomNumber(mMinTimeToProduce, mMaxTimeToProduce);
 
 		std::stringstream ss;
-		ss << "Beehive " << mId << " | Sleeping for " << sleepTime_s << "s" << std::endl;
+		ss << "Flower  " << mId << " | Sleeping for " << sleepTime_s << "s" << std::endl;
 		WriteOutputChunk(ss.str());
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime_s * 1000));
 
-		while (!Flower::GetPollen())
-		{
-			// Wait for flower a flower to produce pollen
-		}
-
 		ss.clear();
-		ss << "Beehive " << mId << " | Adding honey" << std::endl;
+		ss << "Flower  " << mId << " | Producing pollen" << std::endl;
 		WriteOutputChunk(ss.str());
 
 		std::lock_guard<std::mutex> lock(sProductAccess);
@@ -82,7 +76,7 @@ void Beehive::tProduce()
 	}
 }
 
-size_t Beehive::GetRandomNumber(size_t aMin, size_t aMax)
+size_t Flower::GetRandomNumber(size_t aMin, size_t aMax)
 {
 	std::random_device dev;
 	std::mt19937 rng(dev());

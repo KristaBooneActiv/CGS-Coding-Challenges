@@ -11,6 +11,7 @@
 // For additional challenge change the 5 - 15 second timer on the beehives to waiting to see if 1 of 4 flower objects has produced any pollen.
 // The flowers can produce pollen at a set rate or random rate."
 #include "Beehive.h"
+#include "Flower.h"
 #include "StandardOutputForThreads.h"
 
 bool EXIT = false;
@@ -20,7 +21,7 @@ void tFarmHoney()
 	{
 		if (Beehive::GetHoney())
 		{
-			WriteOutputChunk("The farmer harvested one honey!\n\n");
+			WriteOutputChunk("Farmer    | Harvested one honey\n\n");
 		}
 	}
 }
@@ -34,13 +35,21 @@ int main()
 		<< "Press 'ENTER' at any time to stop the simulator.\n"
 		<< "--------------------------------------------------------------------------------------------------\n" << std::endl;
 
+	// Set up the flowers
+	size_t flowerTimerMin = 5;
+	size_t flowerTimerMax = 10;
+	Flower f1(flowerTimerMin, flowerTimerMax);
+	Flower f2(flowerTimerMin, flowerTimerMax);
+	Flower f3(flowerTimerMin, flowerTimerMax);
+	Flower f4(flowerTimerMin, flowerTimerMax);
+
 	// Set up the bees
-	int timerMin = 5;
-	int timerMax = 15;
-	Beehive b1(timerMin, timerMax);
-	Beehive b2(timerMin, timerMax);
-	Beehive b3(timerMin, timerMax);
-	Beehive b4(timerMin, timerMax);
+	size_t hiveTimerMin = 5;
+	size_t himeTimerMax = 15;
+	Beehive b1(hiveTimerMin, himeTimerMax);
+	Beehive b2(hiveTimerMin, himeTimerMax);
+	Beehive b3(hiveTimerMin, himeTimerMax);
+	Beehive b4(hiveTimerMin, himeTimerMax);
 
 	// Set up the farmer
 	auto farmerThread = std::thread(tFarmHoney);
@@ -51,6 +60,7 @@ int main()
 	WriteOutputChunk("\n\n~~~ Thanks for vising the farm ~~~\n\n");
 
 	// Shutdown the honey production operation
+	Flower::StopProduction();
 	Beehive::StopProduction();
 	EXIT = true;
 

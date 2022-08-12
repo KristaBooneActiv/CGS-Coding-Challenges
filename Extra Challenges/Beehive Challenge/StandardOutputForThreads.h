@@ -6,6 +6,6 @@
 static std::mutex COUT_LOCK;
 static void WriteOutputChunk(const std::string& aOutput)
 {
-	std::lock_guard lock(COUT_LOCK);
+	std::lock_guard<std::mutex> lock(COUT_LOCK);
 	std::cout << aOutput;
 }
