@@ -57,6 +57,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{146F93
 		Module 4\Chapter 3\Common\GamePacket.h = Module 4\Chapter 3\Common\GamePacket.h
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extra Challenges", "Extra Challenges", "{E0A1ED62-B575-41E0-9E88-0A9C9EF075A1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Beehive Challenge", "Extra Challenges\Beehive Challenge\Beehive Challenge.vcxproj", "{FBAFF89D-C0AF-4222-A9BF-3FC3DB1D244A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -185,6 +189,14 @@ Global
 		{38C69250-B3C7-4E6D-97DC-7D1F7073959A}.Release|x64.Build.0 = Release|x64
 		{38C69250-B3C7-4E6D-97DC-7D1F7073959A}.Release|x86.ActiveCfg = Release|Win32
 		{38C69250-B3C7-4E6D-97DC-7D1F7073959A}.Release|x86.Build.0 = Release|Win32
+		{FBAFF89D-C0AF-4222-A9BF-3FC3DB1D244A}.Debug|x64.ActiveCfg = Debug|x64
+		{FBAFF89D-C0AF-4222-A9BF-3FC3DB1D244A}.Debug|x64.Build.0 = Debug|x64
+		{FBAFF89D-C0AF-4222-A9BF-3FC3DB1D244A}.Debug|x86.ActiveCfg = Debug|Win32
+		{FBAFF89D-C0AF-4222-A9BF-3FC3DB1D244A}.Debug|x86.Build.0 = Debug|Win32
+		{FBAFF89D-C0AF-4222-A9BF-3FC3DB1D244A}.Release|x64.ActiveCfg = Release|x64
+		{FBAFF89D-C0AF-4222-A9BF-3FC3DB1D244A}.Release|x64.Build.0 = Release|x64
+		{FBAFF89D-C0AF-4222-A9BF-3FC3DB1D244A}.Release|x86.ActiveCfg = Release|Win32
+		{FBAFF89D-C0AF-4222-A9BF-3FC3DB1D244A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -208,6 +220,7 @@ Global
 		{9E373B95-D8C3-4415-8935-D515502E2E32} = {69F73D8A-57BC-43AE-95AF-464576B42BCF}
 		{38C69250-B3C7-4E6D-97DC-7D1F7073959A} = {69F73D8A-57BC-43AE-95AF-464576B42BCF}
 		{146F93DF-5B13-4784-8884-39A0289EC6B7} = {69F73D8A-57BC-43AE-95AF-464576B42BCF}
+		{FBAFF89D-C0AF-4222-A9BF-3FC3DB1D244A} = {E0A1ED62-B575-41E0-9E88-0A9C9EF075A1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0312A7A0-7F74-4BB8-B6F2-C617B8B7D5D4}
